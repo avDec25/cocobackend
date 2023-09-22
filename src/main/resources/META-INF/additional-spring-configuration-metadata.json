@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "minio.endpoint",
+    "type": "java.lang.String",
+    "description": "Minio Server Endpoint URL along with port on which it runs'"
+  },
+  {
+    "name": "minio.access-secret",
+    "type": "java.lang.String",
+    "description": "Minio Server Access Secret"
+  },
+  {
+    "name": "minio.access-key",
+    "type": "java.lang.String",
+    "description": "Minio Server Access Key"
+  }
+]}
