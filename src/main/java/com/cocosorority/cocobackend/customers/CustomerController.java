@@ -25,4 +25,14 @@ public class CustomerController {
         );
     }
 
+    @PostMapping("import")
+    public ResponseEntity<?> importCustomers() {
+        return responseService.prepareResponse(
+            customerService.importCustomersFromGoogleSheet(
+                "1qo5WVayHHOOjcG02cvXnvFl-LINb_uaDrZbI4btTnq4",
+                "Sheet1!A1:B4"
+            )
+        );
+    }
+
 }
