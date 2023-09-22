@@ -39,8 +39,8 @@ public class CustomerService {
 
     @SneakyThrows
     public String importCustomersFromGoogleSheet(String sheetId, String range) {
-        ValueRange values = sheetService.getRangeValue(sheetId, "3:5894");
-        int i = 3;
+        ValueRange values = sheetService.getRangeValue(sheetId, range);
+        int i = 0;
         int insertedRecordCount = 0;
         for(List<Object> row : values.getValues()) {
             try {
@@ -64,14 +64,14 @@ public class CustomerService {
                     extractPincode(((String)row.get(GSheetEnums.ADDRESS.ordinal())).strip().replaceAll("\\p{C}", "")),
                     ((String)row.get(GSheetEnums.EMAIL.ordinal())).strip().replaceAll("\\p{C}", "").toLowerCase()
                 );
-                System.out.printf("Updated %s\n", (String)row.get(GSheetEnums.EMAIL.ordinal()));
+                // System.out.printf("Updated %s\n", (String)row.get(GSheetEnums.EMAIL.ordinal()));
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.printf("Error to import Row: %d \t %s\n", i, (String)row.get(GSheetEnums.EMAIL.ordinal()));
             }
             i += 1;
         }
-        return String.format("Inserted %d Records", insertedRecordCount);
+        return String.format("Inserted %d Records from Sheet[R(%d) x C(%d)]", insertedRecordCount, values.getValues().size(), values.getValues().get(0).size());
     }
 
     private String extractPincode(String address) {
