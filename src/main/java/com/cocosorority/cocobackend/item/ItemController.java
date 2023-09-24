@@ -22,13 +22,22 @@ public class ItemController {
 
     @PostMapping(path = "save")
     public ResponseEntity<?> saveInventoryItem(
-        @RequestPart("itemSaveRequest") ItemSaveRequest itemSaveRequest,
-        @RequestPart MultipartFile image
+            @RequestPart String name,
+            @RequestPart String dropId,
+            @RequestPart String costPrice,
+            @RequestPart String sellingPrice,
+            @RequestPart String shipping,
+            @RequestPart MultipartFile image
     ) {
+        ItemSaveRequest itemSaveRequest = new ItemSaveRequest();
+        itemSaveRequest.name = name;
+        itemSaveRequest.dropId = dropId;
+        itemSaveRequest.costPrice = costPrice;
+        itemSaveRequest.sellingPrice = sellingPrice;
+        itemSaveRequest.shipping = shipping;
         itemSaveRequest.image = image;
         return responseService.prepareResponse(
             itemService.saveItem(itemSaveRequest)
-        );
+        ); 
     }
-
 }

@@ -21,7 +21,7 @@ public class ItemService {
     @Autowired
     MinioClient minioClient;
 
-    private final String SQL_SAVE_ITEM = "INSERT INTO items (name, drop_id, cost, shipping, image) VALUES (?, ?, ?, ?, ?)";
+    private final String SQL_SAVE_ITEM = "INSERT INTO items (name, drop_id, cost_price, selling_price, shipping, image) VALUES (?, ?, ?, ?, ?, ?)";
 
     @SneakyThrows
     public String saveItem(ItemSaveRequest request) {
@@ -51,11 +51,11 @@ public class ItemService {
             SQL_SAVE_ITEM,
             request.name,
             request.dropId,
-            request.cost,
+            request.costPrice,
+            request.sellingPrice,
             request.shipping,
             request.image.getOriginalFilename()
         );
         return String.format("Updated %d rows", updatedRows);
     }
-
 }
