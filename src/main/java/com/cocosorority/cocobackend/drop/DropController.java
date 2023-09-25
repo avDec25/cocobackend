@@ -22,6 +22,7 @@ public class DropController {
 
     @PostMapping("save")
     public ResponseEntity<?> saveDrop(@RequestBody DropSaveRequest dropSaveRequest) {
+        dropSaveRequest.dropId = dropSaveRequest.dropId.toLowerCase();
         return responseService.prepareResponse(
             dropService.saveDrop(dropSaveRequest)
         );
