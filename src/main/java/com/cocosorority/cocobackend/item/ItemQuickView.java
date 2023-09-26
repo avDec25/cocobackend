@@ -6,8 +6,9 @@ import lombok.Data;
 public class ItemQuickView {
     public String itemId;
     public String name;
-    public String sellingPrice;
-    public String shipping;
+    public String dropId;
     public String image;
     public String costPrice;
+    public String sellingPrice;
+    public String shipping;
 }

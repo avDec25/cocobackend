@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cocosorority.cocobackend.customers.CustomerQuickView;
 import com.cocosorority.cocobackend.item.ItemQuickView;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -50,5 +51,18 @@ public class ResponseService {
         JsonObject response = new JsonObject();
         response.addProperty("timestamp", String.format("%s", new Date()));
         return response;
+    }
+
+    public ResponseEntity<?> prepareCustomerListResponse(List<CustomerQuickView> listCustomers) {
+        JsonObject response = getBaseResponseObject();
+        JsonElement data = gson.toJsonTree(listCustomers, new TypeToken<List<CustomerQuickView>>(){}.getType());
+        response.add("message", data);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(gson.toJson(response));
     }
 }

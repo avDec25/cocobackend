@@ -29,7 +29,7 @@ public class ItemService {
     @Autowired
     MinioClient minioClient;
 
-    String SQL_SELECT_ITEMS = "SELECT item_id, name, image, cost_price, selling_price, shipping FROM items WHERE drop_id=?";
+    String SQL_SELECT_ITEMS = "SELECT item_id, name, drop_id, image, cost_price, selling_price, shipping FROM items WHERE drop_id=?";
     
     private final String SQL_SAVE_ITEM = "INSERT INTO items (name, drop_id, cost_price, selling_price, shipping, image) VALUES (?, ?, ?, ?, ?, ?)";
     private final String PUBLIC_POLICY = "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:GetBucketLocation\",\"s3:ListBucket\",\"s3:ListBucketMultipartUploads\"],\"Resource\":[\"arn:aws:s3:::%s\"]},{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":[\"*\"]},\"Action\":[\"s3:PutObject\",\"s3:AbortMultipartUpload\",\"s3:DeleteObject\",\"s3:GetObject\",\"s3:ListMultipartUploadParts\"],\"Resource\":[\"arn:aws:s3:::%s/*\"]}]}";
@@ -97,10 +97,11 @@ public class ItemService {
                         ItemQuickView qView = new ItemQuickView();
                         qView.itemId = rs.getString(1);
                         qView.name = rs.getString(2);
-                        qView.sellingPrice = rs.getString(3);
-                        qView.shipping = rs.getString(4);
-                        qView.image = rs.getString(5);
-                        qView.costPrice = rs.getString(6);
+                        qView.dropId = rs.getString(3);
+                        qView.image = rs.getString(4);
+                        qView.costPrice = rs.getString(5);
+                        qView.sellingPrice = rs.getString(6);
+                        qView.shipping = rs.getString(7);
                         result.add(qView);
                     }
                     return result;

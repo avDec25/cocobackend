@@ -19,7 +19,7 @@ public class OrderController {
     ResponseService responseService;
 
     @PostMapping("create")
-    public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest orderRequest) {
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrderRequest orderRequest) {
         return responseService.prepareResponse(
             orderService.createOrder(orderRequest)
         );

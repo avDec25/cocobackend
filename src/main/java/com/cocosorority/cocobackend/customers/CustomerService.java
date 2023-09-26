@@ -1,5 +1,8 @@
 package com.cocosorority.cocobackend.customers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,6 +11,7 @@ import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Service;
 
 import com.cocosorority.cocobackend.utils.GoogleSheetService;
@@ -90,5 +94,27 @@ public class CustomerService {
             return m.group(0);
         }
         return "";
+    }
+
+    private final String SQL_SELECT_CUSTOMERS = "SELECT customer_id, name, social_id FROM customers ORDER BY name";
+    public List<CustomerQuickView> listCustomers() {
+        List<CustomerQuickView> data = jdbcTemplate.query(
+            SQL_SELECT_CUSTOMERS,
+            new ResultSetExtractor<List<CustomerQuickView>>() {
+                @Override
+                public List<CustomerQuickView> extractData(ResultSet rs) throws SQLException {
+                    List<CustomerQuickView> result = new ArrayList<CustomerQuickView>();
+                    while(rs.next()) {
+                        CustomerQuickView qView = new CustomerQuickView();
+                        qView.customerId = rs.getString(1);
+                        qView.name = rs.getString(2);
+                        qView.socialId = rs.getString(3);
+                        result.add(qView);
+                    }
+                    return result;
+                }
+            }
+        );
+        return data;
     }
 }
