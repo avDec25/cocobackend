@@ -1,12 +1,14 @@
 package com.cocosorority.cocobackend.item;
 
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Data;
 
-public class ItemSaveRequest {
+@Data
+public class ItemQuickView {
+    public String itemId;
     public String name;
     public String dropId;
+    public String image;
     public String costPrice;
     public String sellingPrice;
     public String shipping;
-    public MultipartFile image;
 }

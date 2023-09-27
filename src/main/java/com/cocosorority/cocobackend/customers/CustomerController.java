@@ -3,6 +3,8 @@ package com.cocosorority.cocobackend.customers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +28,27 @@ public class CustomerController {
     }
 
     @PostMapping("import")
-    public ResponseEntity<?> importCustomers() {
+    public ResponseEntity<?> importCustomers(@RequestBody CustomerSheetImportRequest request) {
         return responseService.prepareResponse(
             customerService.importCustomersFromGoogleSheet(
-                "1qo5WVayHHOOjcG02cvXnvFl-LINb_uaDrZbI4btTnq4",
-                "Sheet1!A1:B4"
+                request.sheetId,
+                request.range
             )
         );
     }
 
+    @GetMapping("list")
+    public ResponseEntity<?> getCustomersList() {
+        return responseService.prepareCustomerListResponse(
+            customerService.listCustomers()
+        );
+    }
+
+    
+    @GetMapping("{id}")
+    public ResponseEntity<?> getCustomerWithId(@PathVariable("id") String customerId) {
+        return responseService.prepareResponse(
+            customerService.getCustomerDetails(customerId)
+        );
+    }
 }

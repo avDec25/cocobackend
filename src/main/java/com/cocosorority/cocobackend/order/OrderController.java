@@ -1,5 +1,6 @@
 package com.cocosorority.cocobackend.order;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,26 @@ public class OrderController {
     ResponseService responseService;
 
     @PostMapping("create")
-    public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest orderRequest) {
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrderRequest orderRequest) {
         return responseService.prepareResponse(
             orderService.createOrder(orderRequest)
+        );
+    }
+
+    @PostMapping("history")
+    public ResponseEntity<?> createOrder(@RequestBody CustomerOrderHistoryRequest orderHistoryRequest) {
+        if (StringUtils.isBlank(orderHistoryRequest.dropId)) {
+            orderHistoryRequest.dropId = null;
+        }
+        return responseService.prepareOrderHistoryResponse(
+            orderService.getOrderHistory(orderHistoryRequest)
+        );
+    }
+
+    @PostMapping("update")
+    public ResponseEntity<?> updateOrder(@RequestBody OrderUpdateRequest updateRequest) {
+        return responseService.prepareResponse(
+            orderService.updateOrder(updateRequest)
         );
     }
 }
