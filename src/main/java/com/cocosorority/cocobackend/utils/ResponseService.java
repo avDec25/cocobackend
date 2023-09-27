@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.cocosorority.cocobackend.customers.CustomerQuickView;
 import com.cocosorority.cocobackend.item.ItemQuickView;
+import com.cocosorority.cocobackend.order.OrderHistoryResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -56,6 +57,19 @@ public class ResponseService {
     public ResponseEntity<?> prepareCustomerListResponse(List<CustomerQuickView> listCustomers) {
         JsonObject response = getBaseResponseObject();
         JsonElement data = gson.toJsonTree(listCustomers, new TypeToken<List<CustomerQuickView>>(){}.getType());
+        response.add("message", data);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(gson.toJson(response));
+    }
+
+    public ResponseEntity<?> prepareOrderHistoryResponse(List<OrderHistoryResponse> orderHistory) {
+        JsonObject response = getBaseResponseObject();
+        JsonElement data = gson.toJsonTree(orderHistory, new TypeToken<List<OrderHistoryResponse>>(){}.getType());
         response.add("message", data);
 
         HttpHeaders responseHeaders = new HttpHeaders();
