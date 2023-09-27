@@ -48,7 +48,10 @@ public class OrderService {
                 "items.selling_price, " +
                 "items.shipping, " +
                 "orders.adjusted_cost, " +
-                "orders.size " +
+                "orders.size, " +
+                "orders.status, " +
+                "orders.tracking_id, " +
+                "orders.source " +
             "FROM " +
                 "orders " +
                 "INNER JOIN items ON orders.item_id = items.item_id " +
@@ -86,6 +89,9 @@ public class OrderService {
                         oHis.shipping = rs.getString(7);
                         oHis.adjustedCost = rs.getString(8);
                         oHis.size = rs.getString(9);
+                        oHis.status = rs.getString(10);
+                        oHis.trackingId = rs.getString(11);
+                        oHis.source = rs.getString(12);
                         result.add(oHis);
                     }
                     return result;
@@ -94,5 +100,20 @@ public class OrderService {
         );
         return data;
     }
-    
+
+    public String updateOrder(OrderUpdateRequest request) {
+        String SQL_UPDATE_ORDER = 
+        "UPDATE orders SET %s='%s' WHERE item_id = '%s' AND `size` = '%s' AND customer_id = '%s'";
+        
+        int updatedRows = jdbcTemplate.update(String.format(
+            SQL_UPDATE_ORDER, 
+            request.datapoint, 
+            request.value, 
+            request.itemId, 
+            request.size, 
+            request.customerId
+        ));
+
+        return String.format("Updated %d rows.", updatedRows);
+    }
 }

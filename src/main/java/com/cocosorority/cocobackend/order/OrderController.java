@@ -35,4 +35,11 @@ public class OrderController {
             orderService.getOrderHistory(orderHistoryRequest)
         );
     }
+
+    @PostMapping("update")
+    public ResponseEntity<?> updateOrder(@RequestBody OrderUpdateRequest updateRequest) {
+        return responseService.prepareResponse(
+            orderService.updateOrder(updateRequest)
+        );
+    }
 }

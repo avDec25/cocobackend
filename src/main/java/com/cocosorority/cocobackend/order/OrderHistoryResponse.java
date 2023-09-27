@@ -10,4 +10,7 @@ public class OrderHistoryResponse {
 	public String shipping;
 	public String adjustedCost;
 	public String size;
+	public String status;
+	public String trackingId;
+	public String source;
 }
