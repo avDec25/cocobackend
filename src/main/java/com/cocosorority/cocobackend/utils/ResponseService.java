@@ -79,4 +79,16 @@ public class ResponseService {
                 .headers(responseHeaders)
                 .body(gson.toJson(response));
     }
+
+    public ResponseEntity<?> prepareResponse(JsonObject customerDetail) {
+        JsonObject response = getBaseResponseObject();
+        response.add("message", customerDetail);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(gson.toJson(response));
+    }
 }

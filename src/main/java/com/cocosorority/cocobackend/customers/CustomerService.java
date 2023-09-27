@@ -1,5 +1,6 @@
 package com.cocosorority.cocobackend.customers;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +12,13 @@ import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Service;
 
 import com.cocosorority.cocobackend.utils.GoogleSheetService;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import com.google.gson.JsonObject;
 
 import lombok.SneakyThrows;
 
@@ -116,5 +119,36 @@ public class CustomerService {
             }
         );
         return data;
+    }
+
+    public JsonObject getCustomerDetails(String customerId) {
+        String SELECT_CUSTOMER_SQL = "SELECT customer_id, name, phone, address, email, social_id, pincode FROM customers where customer_id=?";
+        PreparedStatementSetter setter = new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps) throws SQLException {
+                ps.setString(1, customerId);
+            }
+        };
+        JsonObject customer = jdbcTemplate.query(
+            SELECT_CUSTOMER_SQL,
+            setter,
+            new ResultSetExtractor<JsonObject>() {
+                @Override
+                public JsonObject extractData(ResultSet rs) throws SQLException {
+                    JsonObject result = new JsonObject();
+                    while(rs.next()) {
+                        result.addProperty("customerId", rs.getString(1));
+                        result.addProperty("name", rs.getString(2));
+                        result.addProperty("phone", rs.getString(3));
+                        result.addProperty("address", rs.getString(4));
+                        result.addProperty("email", rs.getString(5));
+                        result.addProperty("socialId", rs.getString(6));
+                        result.addProperty("pincode", rs.getString(7));
+                    }
+                    return result;
+                }
+            }
+        );
+        return customer;
     }
 }
